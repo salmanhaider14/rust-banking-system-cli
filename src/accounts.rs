@@ -8,7 +8,8 @@ pub struct Account {
     pub user_name: String,
     pub user_pass: String,
     pub acc_no: String,
-    pub balance: u128,
+    pub balance: u64,
+    pub transactions: Vec<String>,
 }
 impl Account {
     pub fn login(accounts: &Vec<Self>) -> Option<usize> {
@@ -69,12 +70,18 @@ impl Account {
         // Write the header if the file is empty
         let metadata = std::fs::metadata(file_path).expect("Unable to read file metadata");
         if metadata.len() == 0 {
-            wtr.write_record(&["Name", "Password", "Account Number", "Balance"])
-                .expect("Failed to write header");
+            wtr.write_record(&[
+                "Name",
+                "Password",
+                "Account Number",
+                "Balance",
+                "Transactions",
+            ])
+            .expect("Failed to write header");
         }
 
         // Write the user's data
-        wtr.write_record(&[name, pass, account_num, "100".to_string()])
+        wtr.write_record(&[name, pass, account_num, "100".to_string(), " ".to_string()])
             .expect("Failed to write record");
 
         wtr.flush().expect("Failed to flush writer");
